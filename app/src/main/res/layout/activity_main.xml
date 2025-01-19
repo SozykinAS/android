@@ -81,11 +81,11 @@
         android:id="@+id/btnAddGamers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="64dp"
         android:text="+"
         app:layout_constraintBottom_toBottomOf="@+id/gamers"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/gamers"
-        app:layout_constraintTop_toTopOf="@+id/gamers" />
+        app:layout_constraintTop_toTopOf="@+id/gamers"/>
 
     <Button
         android:id="@+id/btnAddPers"
@@ -94,7 +94,7 @@
         android:text="+"
         app:layout_constraintBottom_toBottomOf="@+id/pers"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/pers"
+        android:layout_marginEnd="64dp"
         app:layout_constraintTop_toTopOf="@+id/pers" />
     <Button
         android:id="@+id/btnAddMaps"
@@ -103,7 +103,7 @@
         android:text="+"
         app:layout_constraintBottom_toBottomOf="@+id/maps"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/maps"
+        android:layout_marginEnd="64dp"
         app:layout_constraintTop_toTopOf="@+id/maps" />
 
 

@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         get() = _binding ?: throw IllegalStateException("Binding for ActivityMainBinding null")
     val game = Unmatched()
     var basestr = ""
+    var s = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -46,25 +47,33 @@ class MainActivity : AppCompatActivity() {
         binding.btnAddGamers.setOnClickListener(){
             val alert_dialog = AlertDialog.Builder(this)
             val edTx = EditText(this)
-            alert_dialog.setMessage("Добавлено")
+            alert_dialog.setMessage("Добавить нового игрока")
             alert_dialog.setView(edTx)
+
             alert_dialog.setPositiveButton("Добавить"){
-                dialog, which -> finish()
-
-            }
-            alert_dialog.show()
-
-            var s = ""
-            //s = binding.edText.text.toString()
-
-            if (s!=""){
+                dialog, which ->
+                s = edTx.text.toString()
+                if (s!=""){
                 game.add_gamers(listOf(s))
                 val added_gamer = game.get_base()["Игроки"]
                 basestr = binding.gamers.text.toString()
                 basestr += "  " + added_gamer?.size.toString()+" "
                 basestr += added_gamer?.lastOrNull()?.toString() + "\n"
                 binding.gamers.text = basestr
+
             }
+
+            }
+            alert_dialog.setNegativeButton("Отмена"){
+                    dialog, which ->
+                dialog.dismiss()
+            }
+            alert_dialog.show()
+
+
+            //s = binding.edText.text.toString()
+
+
 
 
 
