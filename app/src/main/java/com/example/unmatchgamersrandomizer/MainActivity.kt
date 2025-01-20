@@ -111,8 +111,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnBan.setOnClickListener(){
             val intent = Intent(this, BanActivity::class.java)
+            val base = game.get_base()
+            val bundle = Bundle()
 
-            //intent.putExtra("key_data", game.get_base()) // Передача данных
+            base.forEach { key, value ->
+
+                bundle.putStringArrayList(key,  value as ArrayList<String>)
+
+
+            }
+            intent.putExtra("key_data", bundle) // Передача данных
             startActivity(intent)
 
         }
