@@ -1,6 +1,7 @@
 package com.example.unmatchgamersrandomizer
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -91,7 +92,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -109,7 +109,13 @@ class MainActivity : AppCompatActivity() {
 
 
 
+        binding.btnBan.setOnClickListener(){
+            val intent = Intent(this, BanActivity::class.java)
 
+            //intent.putExtra("key_data", game.get_base()) // Передача данных
+            startActivity(intent)
+
+        }
 
 
     }
