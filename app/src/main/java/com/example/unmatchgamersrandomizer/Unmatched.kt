@@ -13,14 +13,15 @@ class Unmatched{
 
         return mapOf("Игроки" to gamers_base,"Персонажи" to pers_base, "Карты" to maps)
     }
-    fun add_gamers(names: List<String>){
-        gamers_base.addAll(names)
+    fun add_gamers(names: String){
+        gamers_base.add(names)
     }
-    fun add_maps(names: List<String>){
-        maps.addAll(names)
+    fun add_pers(names: String){
+        pers_base.add(names)
     }
-    fun add_pers(names: List<String>){
-        pers_base.addAll(names)
+
+    fun add_maps(names: String){
+        maps.add(names)
     }
     fun startGame() {
         val gamers = ArrayList(gamers_base)
