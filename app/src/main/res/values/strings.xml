@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">UnmatchGamersRandomizer</string>
     <string name="title1">Unmatched</string>
+    <string name="btnBan">Ban</string>
+    <string name="btn_add">+</string>
+    <string name="btnGenerate">Сгенерировать</string>
 </resources>
