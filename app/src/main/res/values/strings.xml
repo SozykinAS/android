@@ -4,4 +4,6 @@
     <string name="btnBan">Ban</string>
     <string name="btn_add">+</string>
     <string name="btnGenerate">Сгенерировать</string>
+    <string name="btnBackBan">НАЗАД</string>
+    <string name="titleBan">Кого баним?</string>
 </resources>

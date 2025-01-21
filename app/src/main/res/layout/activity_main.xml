@@ -135,12 +135,6 @@
         </LinearLayout>
     </ScrollView>
 
-
-
-
-
-
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnBan"
         android:layout_width="match_parent"

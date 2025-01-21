@@ -1,4 +1,6 @@
 package com.example.unmatchgamersrandomizer
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.widget.Button
@@ -12,7 +14,7 @@ class BanActivity : AppCompatActivity() {
     private val binding
         get() = _binding ?: throw IllegalStateException("Binding for ActivityMainBinding null")
 
-    private val buttonList = mutableListOf<Button>()
+    private val checkBoxList = mutableListOf<CheckBox>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ban)
@@ -39,22 +41,30 @@ class BanActivity : AppCompatActivity() {
                     val checkBox = CheckBox(this)
                         checkBox.text = "${str}"
                         checkBox.textSize = 35f
-                        buttonList.add(checkBox)
+                        checkBoxList.add(checkBox)
                         lLayoutBan.addView(checkBox)
                 }
-
-
             }
-
-
-
-
 
 
         }
 
 
         binding.btnBack.setOnClickListener(){
+            val check_Box_List :MutableList<String> = mutableListOf()
+            checkBoxList.forEach(){check_box->
+                if(check_box.isChecked){
+                    check_Box_List.add(check_box.text.toString())
+
+                }
+                else{
+                    check_Box_List.add("non")
+                }
+            }
+            val returnIntent = Intent()
+            returnIntent.putExtra("resultKey", check_Box_List as ArrayList<String>)
+            setResult(Activity.RESULT_OK, returnIntent)
+
             finish()
         }
     }
