@@ -3,32 +3,27 @@ package com.example.unmatchgamersrandomizer
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
-import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.unmatchgamersrandomizer.databinding.ActivityMainBinding
 
 
 
 class MainActivity : AppCompatActivity() {
-    companion object {
-        const val REQUESTCODE = 1 // Константа для запроса из BanActivity активити
-    }
+   //Для получения данных из BanActivity
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+
     var _binding: ActivityMainBinding?= null
     val binding
         get() = _binding ?: throw IllegalStateException("Binding for ActivityMainBinding null")
     val game = Unmatched()
     var basestr = ""
     var s = ""
-
+    val banlist: MutableList<String> = mutableListOf()
     private fun add_data(who_add:String){
         val alert_dialog = AlertDialog.Builder(this)
         val edTx = EditText(this)
@@ -89,7 +84,6 @@ class MainActivity : AppCompatActivity() {
         binding.maps.text = base_update
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -98,7 +92,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         update_list()
-
         binding.btnAddGamers.setOnClickListener(){
             add_data("Добавить игрока")
         }
@@ -111,19 +104,27 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
+        activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                val resultList = data?.getStringArrayListExtra("resultCheckBox")
+                if (resultList != null) {
+                    banlist.addAll(resultList)
+                }
+            }
+        }
         binding.btnBan.setOnClickListener(){
+            //Запускаем активность BanActivity
             val intent = Intent(this, BanActivity::class.java)
-            val base = game.get_base()
+            val base_for_transfer = game.get_base()
             val bundle = Bundle()
 
-            base.forEach { key, value ->
-
+            base_for_transfer.forEach { key, value ->
                 bundle.putStringArrayList(key,  value as ArrayList<String>)
-
-
             }
             intent.putExtra("key_data", bundle) // Передача данных
-            startActivityForResult(intent, REQUESTCODE)
+            activityResultLauncher.launch(intent)
 
         }
 
@@ -132,27 +133,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUESTCODE && resultCode == Activity.RESULT_OK) {
-            Log.d("MainActivity", "workworkwork")
-            val result = data?.getStringArrayListExtra("resultCheckBox")
-            if (result != null) {
-                var xx = ""
-                result.forEach(){str->
-                    xx+="$str\n"
-                }
-                binding.gamers.text = xx
-            }
-
-        }
-    }
-
 
 
 
 }
 
-private fun AlertDialog.Builder.setPositiveButton(s: String, function: () -> Unit) {
 
-}
