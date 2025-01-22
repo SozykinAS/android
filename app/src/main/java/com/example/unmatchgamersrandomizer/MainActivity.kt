@@ -3,6 +3,7 @@ package com.example.unmatchgamersrandomizer
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -18,6 +19,9 @@ import com.example.unmatchgamersrandomizer.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        const val REQUESTCODE = 1 // Константа для запроса из BanActivity активити
+    }
     var _binding: ActivityMainBinding?= null
     val binding
         get() = _binding ?: throw IllegalStateException("Binding for ActivityMainBinding null")
@@ -84,9 +88,7 @@ class MainActivity : AppCompatActivity() {
         }
         binding.maps.text = base_update
     }
-    private fun ban(){
-        //pass
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,12 +123,34 @@ class MainActivity : AppCompatActivity() {
 
             }
             intent.putExtra("key_data", bundle) // Передача данных
-            startActivity(intent)
+            startActivityForResult(intent, REQUESTCODE)
 
         }
 
 
+
     }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUESTCODE && resultCode == Activity.RESULT_OK) {
+            Log.d("MainActivity", "workworkwork")
+            val result = data?.getStringArrayListExtra("resultCheckBox")
+            if (result != null) {
+                var xx = ""
+                result.forEach(){str->
+                    xx+="$str\n"
+                }
+                binding.gamers.text = xx
+            }
+
+        }
+    }
+
+
+
+
 }
 
 private fun AlertDialog.Builder.setPositiveButton(s: String, function: () -> Unit) {

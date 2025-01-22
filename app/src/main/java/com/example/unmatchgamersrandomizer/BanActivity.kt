@@ -62,7 +62,7 @@ class BanActivity : AppCompatActivity() {
                 }
             }
             val returnIntent = Intent()
-            returnIntent.putExtra("resultKey", check_Box_List as ArrayList<String>)
+            returnIntent.putExtra("resultCheckBox", check_Box_List as ArrayList<String>)
             setResult(Activity.RESULT_OK, returnIntent)
 
             finish()
