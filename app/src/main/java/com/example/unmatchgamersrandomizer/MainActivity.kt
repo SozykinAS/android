@@ -10,8 +10,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.unmatchgamersrandomizer.databinding.ActivityMainBinding
-
-
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
    //Для получения данных из BanActivity
@@ -23,7 +22,10 @@ class MainActivity : AppCompatActivity() {
     val game = Unmatched()
     var basestr = ""
     var s = ""
-    val banlist: MutableList<String> = mutableListOf()
+    val ban_mask: MutableMap<String, List<String>> = mutableMapOf()
+
+
+    //Добавление игрока
     private fun add_data(who_add:String){
         val alert_dialog = AlertDialog.Builder(this)
         val edTx = EditText(this)
@@ -59,13 +61,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
         alert_dialog.setNegativeButton("Отмена"){
-                dialog, which ->
+                dialog, _ ->
             dialog.dismiss()
         }
         alert_dialog.show()
-
-
     }
+    //Функция обновления текста на главном экране
     private fun update_list(){
         var base_update = ""
         game.get_base()["Игроки"]?.forEachIndexed() { ind, strinlist ->
@@ -82,6 +83,41 @@ class MainActivity : AppCompatActivity() {
             base_update += "  ${ind + 1} $strinlist\n"
         }
         binding.maps.text = base_update
+    }
+
+
+    fun startGenerate(accepted_map:Map<String, List<String>>):String {
+        var generateData = ""
+        val gamers = game.get_base()["Игроки"]?.toMutableList()
+        val pers = game.get_base()["Персонажи"]?.toMutableList()
+        val maps = game.get_base()["Карты"]?.toMutableList()
+
+        if (gamers != null && pers != null && maps != null) {
+            accepted_map["Игроки"]?.forEach() { value ->
+                gamers.remove(value)
+            }
+            accepted_map["Персонажи"]?.forEach() { value ->
+                pers.remove(value)
+            }
+            accepted_map["Карты"]?.forEach() { value ->
+                maps.remove(value)
+            }
+            if (gamers.size<=pers.size) {
+                while (gamers.isNotEmpty() == true) {
+                    val gamer_rand = Random.nextInt(gamers.size)
+                    val pers_rand = Random.nextInt(pers.size)
+                    generateData += gamers[gamer_rand] + " играет за "
+                    generateData += pers[pers_rand] + "\n"
+                    gamers.removeAt(gamer_rand)
+                    pers.removeAt(pers_rand)
+                }
+            } else{return "Игроков меньше чем персонажей!!!"}
+        }
+
+        if (gamers != null && maps!=null && pers != null && maps.size>0){
+        return generateData + "\nКарта: "+ (maps.get(Random.nextInt(maps.size)))
+        }
+        return generateData + "\nКарта: НЕ НАЙДЕНА"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,17 +139,24 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
-
+        //Возврат из BanActicity Данных
         activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data
-                val resultList = data?.getStringArrayListExtra("resultCheckBox")
-                if (resultList != null) {
-                    banlist.addAll(resultList)
-                }
+                val resultListGamersFromBan = data?.getStringArrayListExtra("Игроки")
+                val resultListPersFromBan = data?.getStringArrayListExtra("Персонажи")
+                val resultListMapsFromBan = data?.getStringArrayListExtra("Карты")
+                if (resultListGamersFromBan != null)
+                    ban_mask["Игроки"] = resultListGamersFromBan
+                if (resultListPersFromBan != null)
+                    ban_mask["Персонажи"] = resultListPersFromBan
+                if (resultListMapsFromBan != null)
+                    ban_mask["Карты"] = resultListMapsFromBan
+
             }
         }
+
+        //Слушатель кнопки BAN
         binding.btnBan.setOnClickListener(){
             //Запускаем активность BanActivity
             val intent = Intent(this, BanActivity::class.java)
@@ -127,6 +170,26 @@ class MainActivity : AppCompatActivity() {
             activityResultLauncher.launch(intent)
 
         }
+
+        //Слушатель кнопки GENERATE
+        binding.btnGenerate.setOnClickListener() {
+
+            val test = startGenerate(ban_mask)
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Unmatch!!!")
+                .setMessage(test)
+                .setPositiveButton("ОК") { dialog, _ ->
+                    dialog.dismiss()
+                }
+
+            val dialog = builder.create()
+
+            // Установить, чтобы диалог не закрывался при нажатии вне его
+            dialog.setCanceledOnTouchOutside(false)
+
+            dialog.show()
+        }
+
 
 
 
