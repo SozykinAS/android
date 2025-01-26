@@ -37,7 +37,7 @@ class BanActivity : AppCompatActivity() {
                                     "Персонажи" to arr_ban?.getStringArrayList("Персонажи"),
                                     "Карты" to arr_ban?.getStringArrayList("Карты"))
 
-            // Цикл формирования checkBoks
+            // Цикл формирования checkBoks и вывода текста
             mapofgamers?.forEach(){(key, value)->
                 val textViewForLnView = TextView(this).apply {
                     text = "$key"
@@ -58,6 +58,7 @@ class BanActivity : AppCompatActivity() {
 
 
         }
+
 
         //Слушатель на нажатую кнопку назад
         binding.btnBack.setOnClickListener(){

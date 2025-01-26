@@ -6,4 +6,6 @@
     <string name="btnGenerate">Сгенерировать</string>
     <string name="btnBackBan">НАЗАД</string>
     <string name="titleBan">Кого баним?</string>
+    <string name="gamersTitle">Игроки:</string>
+    <string name="persTitle">Персонажи:</string>
 </resources>
